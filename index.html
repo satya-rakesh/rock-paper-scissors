@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>0-9Rock Paper Scissors</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>test Rock Paper Scissors</title>
+  <link rel="stylesheet" href="../styles/updatedstyles.css">
 </head>
 <body onload="resultFunction()">
 
@@ -12,25 +12,36 @@
 
     <div class="box">
 
-      <p>ROCK PAPER SCISSORS</p>
+      <p class="title">ROCK PAPER SCISSOR</p>
+      
+      <div class="display">
+        <div class="playerDisplay card">
+          <div class="playerScore">Your Score :<span class='youScored'>0</span></div>
+          <div class="playerMove moveResult">
+            <img src="./rock.png" class="playerSelectedMove" alt="hand sowing rock gesture">
+          </div>
+        </div>
+        <div class="computerDisplay card">
+          <div class="computerScore">Computer Score :<span class="computerScored">0</span></div>
+          <div class="computerMove moveResult">
+            <img src="./rock.png" class="computerSelectedMove" alt="hand sowing rock gesture">
+          </div>
+        </div>
+      </div>
 
       <div class="buttons">
-        <button onclick="playGame(this.value)" value="rock" id="rock"><img src="./rock.png" alt="hand sowing rock gesture"></button>
-        <button onclick="playGame(this.value)" value="papper" id="papper"><img src="./papper.png" alt="hand showing paper gesture"></button>
-        <button onclick="playGame(this.value)" value="scissor"  id="scissors"><img src="./scissors.webp" alt=" hand showing scissor gesture"></button>
+        <button onclick="playGame(this.value)" value="rock" id="rock">
+          <img src="./rock.png" alt="rock hand gesture">
+        </button>
+        <button onclick="playGame(this.value)" value="paper" id="paper">
+          <img src="./paper.png" alt="paper hand gesture">
+        </button>
+        <button onclick="playGame(this.value)" value="scissor" id="scissor">
+          <img src="./scissor.png" alt="scissor hand gesture">
+        </button>
       </div>    
-
-      <div class="results">
-        <div id="you">You Scored : 0</div>
-        <div id="tie">Tie Score : 0</div>
-        <div id="computer">Computer Scored : 0</div>        
-      </div>
       
-      <div class="moves">
-        <h3 id ='result'></h3>
-      </div>
-
-      <button onclick="reset()" style="width: 100px;height: 50px; border-radius: 5px; background-color: transparent; border: 1px solid red; outline: none;">Reset</button>    
+      <button onclick="reset()" class="reset-btn">Reset</button>    
 
     </div>
 
@@ -40,6 +51,7 @@
     let computerMove ='';
     let score = JSON.parse(localStorage.getItem('gameResult')) || {tieScore:0, computerScore:0, yourScore:0 };
     // document.querySelector('#result').innerHTML = 'Start the Game';
+
     function pickComputerMove(){
   
       let randomNumber = Math.random();
@@ -53,65 +65,71 @@
       else if (randomNumber >=2/3 && randomNumber<1){
         return computerMove ="scissor";
       }
-  
     }
   
     function playGame(playerMove){   
   
-      pickComputerMove();
-  
-      if (playerMove === 'rock'){      
-        if(computerMove === 'rock'){
-          score.tieScore +=1
-        } else if(computerMove === 'papper'){
-          score.computerScore +=1
-        } else if(computerMove === 'scissor'){
-          score.yourScore +=1
-        }
-      } 
-  
-      else if (playerMove === 'papper'){
-        if(computerMove === 'rock'){
-          score.yourScore +=1
-        } else if(computerMove === 'papper'){
-          score.tieScore +=1
-        } else if(computerMove === 'scissor'){
-          score.computerScore +=1
-        }
-      }  
-  
-      else if (playerMove === 'scissor'){
-        if(computerMove === 'rock'){
-          score.computerScore +=1
-        } else if(computerMove === 'papper'){
-          score.yourScore +=1
-        } else if(computerMove === 'scissor'){
-          score.tieScore +=1
-        }
-      }
-  
-      localStorage.setItem('gameResult', JSON.stringify(score));
-      resultFunction();
-      // document.querySelector('#result').innerHTML = (`you picked ${playerMove}, and computer picked ${computerMove} , wins : ${(score.yourScore)} ,losses : ${(score.computerScore)} , ties : ${(score.tieScore)}`); 
-       document.querySelector('#result').innerHTML = `you picked ${playerMove}, and computer picked ${computerMove}`
+  pickComputerMove();
+
+  if (playerMove === 'rock'){ 
+    document.querySelector('.playerSelectedMove').setAttribute('src','./rock.png');
+    if(computerMove === 'rock'){
+      score.tieScore +=1;
+      document.querySelector('.computerSelectedMove').setAttribute('src','./rock.png');
+    } else if(computerMove === 'papper'){
+      score.computerScore +=1;
+      document.querySelector('.computerSelectedMove').setAttribute('src','./paper.png');
+    } else if(computerMove === 'scissor'){
+      score.yourScore +=1
+      document.querySelector('.computerSelectedMove').setAttribute('src','./scissor.png');
     }
+  } 
+
+  else if (playerMove === 'paper'){
+    document.querySelector('.playerSelectedMove').setAttribute('src','./paper.png');
+    if(computerMove === 'rock'){
+      score.yourScore +=1;
+      document.querySelector('.computerSelectedMove').setAttribute('src','./rock.png');
+    } else if(computerMove === 'papper'){
+      score.tieScore +=1;
+      document.querySelector('.computerSelectedMove').setAttribute('src','./paper.png');
+    } else if(computerMove === 'scissor'){
+      score.computerScore +=1;
+      document.querySelector('.computerSelectedMove').setAttribute('src','./scissor.png');
+    }
+  }  
+
+  else if (playerMove === 'scissor'){
+    document.querySelector('.playerSelectedMove').setAttribute('src','./scissor.png')
+    if(computerMove === 'rock'){
+      score.computerScore +=1;
+      document.querySelector('.computerSelectedMove').setAttribute('src','./rock.png');
+    } else if(computerMove === 'papper'){
+      score.yourScore +=1;
+      document.querySelector('.computerSelectedMove').setAttribute('src','./paper.png');
+    } else if(computerMove === 'scissor'){
+      score.tieScore +=1
+      document.querySelector('.computerSelectedMove').setAttribute('src','./scissor.png');
+    }
+  }
+
+  localStorage.setItem('gameResult', JSON.stringify(score));
+  resultFunction();
+}
   
-    function reset(){
+function reset(){
       localStorage.removeItem('gameResult');
       score.tieScore =0;
       score.yourScore = 0;
       score.computerScore = 0;
       resultFunction();
-      document.querySelector('#result').innerText = 'Game Reset';
+      // document.querySelector('#result').innerText = 'Game Reset';
     }
     
     function resultFunction(){
-      document.querySelector('#result').innerHTML = 'Continue the Game';
       let score = JSON.parse(localStorage.getItem('gameResult')) || {tieScore:0, computerScore:0, yourScore:0 };
-      document.getElementById('you').innerHTML= `You Scored : ${score.yourScore}`;
-      document.getElementById('computer').innerHTML= `Computer Scored : ${score.computerScore}`;
-      document.getElementById('tie').innerHTML= `Tie Score : ${score.tieScore}`;
-      
+      document.querySelector('.youScored').innerHTML= `${score.yourScore}`;
+      document.querySelector('.computerScored').innerHTML= `${score.computerScore}`;
     }
   </script>
 </body>
